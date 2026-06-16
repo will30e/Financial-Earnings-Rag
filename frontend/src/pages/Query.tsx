@@ -95,13 +95,13 @@ export default function Query() {
             onChange={(e) => setQueryText(e.target.value)}
             placeholder="Ask anything about earnings reports…"
             rows={3}
-            className="w-full px-4 py-3 bg-surface-DEFAULT border border-surface-border rounded-lg text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-accent resize-none"
+            className="w-full px-4 py-3 bg-surface-DEFAULT border border-surface-border rounded-lg text-sm text-gray-900 placeholder-slate-400 focus:outline-none focus:border-accent resize-none"
           />
           <div className="flex items-center gap-2">
             <select
               value={ticker}
               onChange={(e) => setTicker(e.target.value)}
-              className="px-3 py-2 bg-surface-DEFAULT border border-surface-border rounded-lg text-sm text-slate-300 focus:outline-none focus:border-accent"
+              className="px-3 py-2 bg-surface-DEFAULT border border-surface-border rounded-lg text-sm text-gray-900 focus:outline-none focus:border-accent"
             >
               <option value="">All companies</option>
               {companies.map((c) => (
@@ -111,7 +111,7 @@ export default function Query() {
             <select
               value={year}
               onChange={(e) => setYear(e.target.value)}
-              className="px-3 py-2 bg-surface-DEFAULT border border-surface-border rounded-lg text-sm text-slate-300 focus:outline-none focus:border-accent"
+              className="px-3 py-2 bg-surface-DEFAULT border border-surface-border rounded-lg text-sm text-gray-900 focus:outline-none focus:border-accent"
             >
               <option value="">All years</option>
               <option value="2024">2024</option>
