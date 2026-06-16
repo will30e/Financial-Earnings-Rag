@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: earnings-rag-config
+  namespace: earnings-rag
+data:
+  DEBUG: "false"
+  USE_MOCK_LLM: "true"
+  EMBEDDING_MODEL: "all-MiniLM-L6-v2"
+  CHUNK_SIZE: "512"
+  CHUNK_OVERLAP: "50"
+  TOP_K_RETRIEVAL: "5"
+  ENABLE_METRICS: "true"
+  CHROMA_COLLECTION_NAME: "earnings_reports"

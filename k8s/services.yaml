@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: earnings-rag-backend
+  namespace: earnings-rag
+  labels:
+    app: earnings-rag-backend
+spec:
+  selector:
+    app: earnings-rag-backend
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: earnings-rag-frontend
+  namespace: earnings-rag
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: earnings-rag-frontend
+  template:
+    metadata:
+      labels:
+        app: earnings-rag-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: earnings-rag-frontend:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: earnings-rag-frontend
+  namespace: earnings-rag
+spec:
+  selector:
+    app: earnings-rag-frontend
+  ports:
+    - port: 80
+      targetPort: 80

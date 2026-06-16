@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: earnings-rag-backend
+  namespace: earnings-rag
+  labels:
+    app: earnings-rag-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: earnings-rag-backend
+  template:
+    metadata:
+      labels:
+        app: earnings-rag-backend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8000"
+    spec:
+      containers:
+        - name: backend
+          image: earnings-rag-backend:latest
+          ports:
+            - containerPort: 8000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: earnings-rag-config
+          env:
+            - name: CHROMA_PERSIST_DIR
+              value: /data/chroma
+            - name: DATABASE_URL
+              value: sqlite+aiosqlite:////data/earnings.db
+          volumeMounts:
+            - name: pipeline-data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "2Gi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 20
+            periodSeconds: 30
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 2
+      volumes:
+        - name: pipeline-data
+          persistentVolumeClaim:
+            claimName: pipeline-data-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pipeline-data-pvc
+  namespace: earnings-rag
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
